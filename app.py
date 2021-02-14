@@ -1,6 +1,7 @@
 import streamlit as st
 import plotly.express as px
 import numpy as np
+import pandas as pd
 
 import requests
 from lxml import etree
@@ -62,69 +63,28 @@ for i in data:
 
     # per item per org
     for j in data[org]:
-
+        orgArr[org]['normal'] = 0
+        orgArr[org]['dangerous'] = 0
+        orgArr[org]['signature'] = 0
+    for j in data[org]:
         # item has a severity level defined
         if (j in perm_levels):
             level = perm_levels[j]
 
-            # if level already there for this org
-            if (level in orgArr[org]):
-                orgArr[org][level] += 1
-            else:
-                orgArr[org][level] = 1
+            orgArr[org][level] += 1
 
-pieArr = {}
+print(orgArr)
+
+x = {}
 
 for i in orgArr:
-    pieArr[i] = []
+    x[i] = [orgArr[i][j] for j in orgArr[i]]
 
-    for j in orgArr[i]:
-        pieArr[i].append({"value": orgArr[i][j], "name": j})
+x = pd.DataFrame(x).T
+x.columns = ["normal", "dangerous", "signature"]
+st.write(x)
 
-
-def createPie(org):
-    pie_options = {
-            "backgroundColor": "#2c343c",
-            "title": {
-                "text": "Distribution in levels of permissions",
-                "left": "center",
-                "top": 20,
-                "textStyle": {"color": "#ccc"},
-            },
-            "tooltip": {"trigger": "item", "formatter": "{a} <br/>{b} : {c} ({d}%)"},
-            "visualMap": {
-                "show": True,
-                "min": -5,
-                "max": 10,
-                # "inRange": {"colorLightness": [0, 1]},
-            },
-            "series": [
-                {
-                    "name": "Distribution in levels of permissions",
-                    "type": "pie",
-                    "radius": "55%",
-                    "center": ["50%", "50%"],
-                    "data": pieArr[org],
-                    # "roseType": "radius",
-                    "label": {"color": "rgba(255, 255, 255, 0.3)"},
-                    "labelLine": {
-                        "lineStyle": {"color": "rgba(255, 255, 255, 0.3)"},
-                        "smooth": 0.2,
-                        "length": 10,
-                        "length2": 20,
-                    },
-                    "itemStyle": {
-                        "color": "#c23531",
-                        "shadowBlur": 200,
-                        "shadowColor": "rgba(0, 0, 0, 0.5)",
-                    },
-                    "animationType": "scale",
-                    "animationEasing": "elasticOut",
-                }
-            ],
-        }
-    st_echarts(options=pie_options, key=org)
-
+st.bar_chart(x)
 
 orgs = []
 
@@ -138,4 +98,4 @@ org = st.selectbox(
     orgs
 )
 
-createPie(org)
+# createPie(org)
