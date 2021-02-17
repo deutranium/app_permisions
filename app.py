@@ -96,8 +96,8 @@ st.bar_chart(x)
 st.header("Visualisation")
 st.write("We have taken a dataset of the permissions declared by the top 25 apps \
          and showcased what portion of them come under Dangerous or Normal. Bear \
-         in mind that the number of permissions that these apps require varies and \
-         can be observed by hovering over the chart.")
+         in mind that the number of permissions that these apps require varies.") #and \
+         #can be observed by hovering over the chart.")
 
 # createPie(org)
 
