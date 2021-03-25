@@ -99,7 +99,7 @@ st.write("We have taken a dataset of the permissions declared by the top 25 apps
          in mind that the number of permissions that these apps require varies.") #and \
          #can be observed by hovering over the chart.")
 
-# createPie(org)
+ createPie(org)
 
 st.header("Types of Permissions")
 st.subheader("Normal Permissions")
